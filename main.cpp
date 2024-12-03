@@ -64,20 +64,62 @@ void gameplay(Player &player)
     }
 }
 
+bool whoFirst()
+{
+    std::array<char, 9> gameboardTest{'1', '2', '3', '4', '5', '6', '7', '8', '9'};
+
+    if (gameboardTest == gameboard)
+    {
+        return true;
+    }
+    return false;
+}
+
 void gameplayAI(Player &player)
 {
     srand(time(NULL));
-    
+
     int choice{rand() % 9 + 1};
-    std::cout << player.name << " your turn to play" << std::endl;
-    if (isPlayable(choice) == false)
+
+    if (whoFirst() == true)
     {
-        gameplayAI(player);
+        std::cout << player.name << " your turn to play" << std::endl;
+        int corners[] = {1, 3, 7, 9};
+        choice = corners[rand() % 4];
+        gameboard[choice - 1] = player.symbol;
+        draw_game_board();
+    }
+    else if (gameboard[4] >= '1' && gameboard[4] <= '9')
+    {
+        gameboard[4] = player.symbol;
+        draw_game_board();
+    }
+    else if (gameboard[4] == player.symbol && (gameboard[0||2||6||8] == player.symbol))
+    {
+        int corners[] = {1, 3, 7, 9};
+        choice = corners[rand() % 4];
+        if (isPlayable(choice) == false)
+        {
+            gameplayAI(player);
+        }
+        else
+        {
+            gameboard[choice - 1] = player.symbol;
+            draw_game_board();
+        }
     }
     else
     {
-        gameboard[choice - 1] = player.symbol;
-        draw_game_board();
+        std::cout << player.name << " your turn to play" << std::endl;
+        if (isPlayable(choice) == false)
+        {
+            gameplayAI(player);
+        }
+        else
+        {
+            gameboard[choice - 1] = player.symbol;
+            draw_game_board();
+        }
     }
 }
 
