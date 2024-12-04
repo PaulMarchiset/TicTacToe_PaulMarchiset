@@ -77,51 +77,37 @@ bool whoFirst()
 
 void gameplayAI(Player &player)
 {
-    srand(time(NULL));
-
-    int choice{rand() % 9 + 1};
+    int choice {5};
+    std::cout << player.name << " your turn to play" << std::endl;
 
     if (whoFirst() == true)
     {
-        std::cout << player.name << " your turn to play" << std::endl;
         int corners[] = {1, 3, 7, 9};
         choice = corners[rand() % 4];
-        gameboard[choice - 1] = player.symbol;
-        draw_game_board();
     }
     else if (gameboard[4] >= '1' && gameboard[4] <= '9')
     {
-        gameboard[4] = player.symbol;
-        draw_game_board();
+        choice = 5;
     }
-    else if (gameboard[4] == player.symbol && (gameboard[0||2||6||8] == player.symbol))
+    else if (whoFirst() == false && isPlayable(choice) == false)
     {
         int corners[] = {1, 3, 7, 9};
-        choice = corners[rand() % 4];
-        if (isPlayable(choice) == false)
+        do
         {
-            gameplayAI(player);
-        }
-        else
-        {
-            gameboard[choice - 1] = player.symbol;
-            draw_game_board();
-        }
+            choice = corners[rand() % 4];
+        } while (!isPlayable(choice));
     }
     else
     {
-        std::cout << player.name << " your turn to play" << std::endl;
-        if (isPlayable(choice) == false)
+        do
         {
-            gameplayAI(player);
-        }
-        else
-        {
-            gameboard[choice - 1] = player.symbol;
-            draw_game_board();
-        }
+            choice = rand() % 9 + 1;
+        } while (!isPlayable(choice));
     }
+    gameboard[choice - 1] = player.symbol;
+    draw_game_board();
 }
+
 
 bool gameWin(Player &player)
 {
