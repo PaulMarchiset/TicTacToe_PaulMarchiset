@@ -127,10 +127,6 @@ bool gameWin(Player &player)
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
         }
     }
     return false;
