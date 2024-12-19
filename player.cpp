@@ -3,10 +3,14 @@
 Player create_player()
 {
    Player player;
-   std::cout << "Votre nom" << std::endl;
+   std::cout << "Your name" << std::endl;
    std::cin >> player.name;
-   std::cout << "Votre symbole" << std::endl;
+   std::cout << "Your symbol" << std::endl;
    std::cin >> player.symbol;
+   if (player.symbol >= 1 && player.symbol <= 9) {
+      std::cout << "Your symbol can't be a numeral value other than 0" << std::endl;
+      std::cin >> player.symbol;
+   }
 
    return player;
 }
