@@ -13,5 +13,5 @@ void draw_game_board();
 bool isPlayable(const int &choice);
 void gameplay(Player &player);
 void gameplayAIEasy(Player &player);
-void gameplayAIHard(Player &player);
+void gameplayAIHard(Player &player, Player &player2);
 bool gameWin(Player &player);

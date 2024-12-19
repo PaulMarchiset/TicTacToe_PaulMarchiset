@@ -1,7 +1,5 @@
 #include "game.hpp"
 
-void whoPlay(Player &player1, Player &player2);
-
 void game_AI()
 {
     Player player1{create_player()};
@@ -77,19 +75,19 @@ void gameplayAIEasy(Player &player)
     gameboard[choice - 1] = player.symbol;
 }
 
-void gameplayAIHard(Player &player)
+void gameplayAIHard(Player &player1, Player &player2)
 {
     int choice{0};
     draw_game_board();
-    std::cout << player.name << " is playing..." << std::endl;
+    std::cout << player2.name << " is playing..." << std::endl;
 
     for (int i{0}; i < 9; i++)
     {
         if (isPlayable(i + 1))
         {
             char backup{gameboard[i]};
-            gameboard[i] = player.symbol;
-            if (gameWin(player))
+            gameboard[i] = player2.symbol;
+            if (gameWin(player2))
             {
                 choice = i + 1;
             }
@@ -104,36 +102,66 @@ void gameplayAIHard(Player &player)
         for (int i{0}; i < 9; i++)
         {
 
-            if (i + 7 < 9 && !isPlayable(i + 1) && !isPlayable(i + 4))
+            if (i + 7 < 9 && gameboard[i] == player1.symbol && gameboard[i + 3] == player1.symbol)
             {
                 if (isPlayable(i + 7))
                 {
                     choice = i + 7;
                 }
             }
-            if (i + 4 < 9 && !isPlayable(i + 1) && !isPlayable(i + 7))
+            if (i + 4 < 9 && gameboard[i] == player1.symbol && gameboard[i + 6] == player1.symbol)
             {
                 if (isPlayable(i + 4))
                 {
                     choice = i + 4;
                 }
             }
-            if (i * 3 + 3 < 9 && !isPlayable(i * 3 + 1) && !isPlayable(i * 3 + 2))
+            if (i * 3 + 3 < 9 && gameboard[i * 3] == player1.symbol && gameboard[i * 3 + 1] == player1.symbol)
             {
                 if (isPlayable(i * 3 + 3))
                 {
                     choice = i * 3 + 3;
                 }
             }
-            if (i * 3 + 2 < 9 && !isPlayable(i * 3 + 1) && !isPlayable(i * 3 + 3))
+            if (i * 3 + 2 < 9 && gameboard[i * 3] == player1.symbol && gameboard[i * 3 + 2] == player1.symbol)
             {
                 if (isPlayable(i * 3 + 2))
                 {
                     choice = i * 3 + 2;
                 }
             }
+            if (i == 0 && gameboard[0] == player1.symbol && gameboard[4] == player1.symbol)
+            {
+                if (isPlayable(9))
+                {
+                    choice = 9;
+                }
+            }
+            if (i == 0 && gameboard[4] == player1.symbol && gameboard[8] == player1.symbol)
+            {
+                if (isPlayable(1))
+                {
+                    choice = 1;
+                }
+            }
+            if (i == 0 && gameboard[2] == player1.symbol && gameboard[4] == player1.symbol)
+            {
+                if (isPlayable(7))
+                {
+                    choice = 7;
+                }
+            }
+            if (i == 0 && gameboard[4] == player1.symbol && gameboard[6] == player1.symbol)
+            {
+                if (isPlayable(3))
+                {
+                    choice = 3;
+                }
+            }
             if (choice != 0)
+            {
                 break;
+            }
         }
     }
 
@@ -159,7 +187,7 @@ void gameplayAIHard(Player &player)
         } while (!isPlayable(choice));
     }
 
-    gameboard[choice - 1] = player.symbol;
+    gameboard[choice - 1] = player2.symbol;
 }
 
 bool gameWin(Player &player)
@@ -217,10 +245,8 @@ void whoPlay(Player &player1, Player &player2)
         std::cin >> aiDifficulty;
     }
 
-    // int random_start{rand() % 2};
-    int random_start{2};
-
-    // draw_game_board();
+    int random_start{rand() % 2};
+    
     for (int i{random_start}; i < random_start + 10; i++)
     {
         if (whoWin(player1, player2) == true)
@@ -242,7 +268,7 @@ void whoPlay(Player &player1, Player &player2)
                 }
                 else
                 {
-                    gameplayAIHard(player2);
+                    gameplayAIHard(player1, player2);
                 }
             }
             else
