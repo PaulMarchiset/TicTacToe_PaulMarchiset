@@ -48,8 +48,8 @@ bool isPlayable(const int &choice)
 void gameplay(Player &player)
 {
     int choice{0};
-    std::cout << player.name << " your turn to play" << std::endl;
     draw_game_board();
+    std::cout << player.name << " your turn to play" << std::endl;
     std::cin >> choice;
     if (isPlayable(choice) == false)
     {
@@ -59,7 +59,6 @@ void gameplay(Player &player)
     }
     else
     {
-        std::cout << player.name << std::endl;
         gameboard[choice - 1] = player.symbol;
     }
 }
@@ -67,6 +66,7 @@ void gameplay(Player &player)
 void gameplayAIEasy(Player &player)
 {
     int choice{0};
+    draw_game_board();
     std::cout << player.name << " is playing..." << std::endl;
 
     do
@@ -75,15 +75,13 @@ void gameplayAIEasy(Player &player)
     } while (!isPlayable(choice));
 
     gameboard[choice - 1] = player.symbol;
-    draw_game_board();
 }
 
 void gameplayAIHard(Player &player)
 {
     int choice{0};
-
-    std::cout << player.name << " is playing..." << std::endl;
     draw_game_board();
+    std::cout << player.name << " is playing..." << std::endl;
 
     for (int i{0}; i < 9; i++)
     {
@@ -115,7 +113,7 @@ void gameplayAIHard(Player &player)
             }
             if (i + 4 < 9 && !isPlayable(i + 1) && !isPlayable(i + 7))
             {
-                 if (isPlayable(i + 4))
+                if (isPlayable(i + 4))
                 {
                     choice = i + 4;
                 }
@@ -161,7 +159,6 @@ void gameplayAIHard(Player &player)
         } while (!isPlayable(choice));
     }
 
-    std::cout << player.name << " choice : " << choice << std::endl;
     gameboard[choice - 1] = player.symbol;
 }
 
@@ -188,6 +185,29 @@ bool gameWin(Player &player)
     return false;
 }
 
+bool whoWin(Player &player1, Player &player2)
+{
+    if (gameWin(player1))
+    {
+        std::cout << player1.name << " win :)" << std::endl;
+        return true;
+    }
+    else if (gameWin(player2))
+    {
+        std::cout << player2.name << " win :)" << std::endl;
+        return true;
+    }
+    else if (!gameWin(player1) && !gameWin(player2) && gameboard[0] != '1' && gameboard[1] != '2' && gameboard[2] != '3' && gameboard[3] != '4' && gameboard[4] != '5' && gameboard[5] != '6' && gameboard[6] != '7' && gameboard[7] != '8' && gameboard[8] != '9')
+    {
+        std::cout << "The game is a draw :(" << std::endl;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 void whoPlay(Player &player1, Player &player2)
 {
     int aiDifficulty{0};
@@ -200,52 +220,36 @@ void whoPlay(Player &player1, Player &player2)
     // int random_start{rand() % 2};
     int random_start{2};
 
-    for (int i{random_start}; i < random_start + 9; i++)
+    // draw_game_board();
+    for (int i{random_start}; i < random_start + 10; i++)
     {
+        if (whoWin(player1, player2) == true)
+        {
+            break;
+        }
         if (i % 2 == 0)
         {
-            if (gameWin(player2) == true)
-            {
-                std::cout << player2.name << " win :)" << std::endl;
-                draw_game_board();
-                break;
-            }
-            else
-            {
-                gameplay(player1);
-            }
+            gameplay(player1);
         }
         else
         {
-            if (gameWin(player1) == true)
+
+            if (game_AI)
             {
-                std::cout << player1.name << " win :)" << std::endl;
-                draw_game_board();
-                break;
-            }
-            else
-            {
-                if (game_AI)
+                if (aiDifficulty == 0)
                 {
-                    if (aiDifficulty == 0)
-                    {
-                        gameplayAIEasy(player2);
-                    }
-                    else
-                    {
-                        gameplayAIHard(player2);
-                    }
+                    gameplayAIEasy(player2);
                 }
                 else
                 {
-                    gameplay(player2);
+                    gameplayAIHard(player2);
                 }
+            }
+            else
+            {
+                gameplay(player2);
             }
         }
     }
-    if (!gameWin(player1) && !gameWin(player2))
-    {
-        draw_game_board();
-        std::cout << "The game is a draw :(" << std::endl;
-    }
+    draw_game_board();
 }
